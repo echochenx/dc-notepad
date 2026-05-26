@@ -135,6 +135,11 @@ async function addNote(content) {
   
   document.getElementById('note-input').value = '';
   showToast(`已保存到 ${DEFAULT_CATEGORIES[type].icon} ${DEFAULT_CATEGORIES[type].name}`);
+  
+  // 自动为待办分类创建 DC 待办
+  if (type === 'todo') {
+    setTimeout(() => DCTodo.createFromNote(note), 500);
+  }
 }
 
 async function deleteNote(id) {
@@ -186,6 +191,7 @@ function renderNotes() {
         <div class="note-content">${escapeHtml(note.content).replace(/\n/g, '<br>')}</div>
         <div class="note-actions">
           <button onclick="copyNote('${note.id}')">📋 复制</button>
+          <button onclick="createTodoFromNote('${note.id}')" style="background:#10B98120;color:#10B981">✅ 创建待办</button>
           <button class="btn-delete" onclick="deleteNote('${note.id}')">🗑️ 删除</button>
         </div>
       </div>
@@ -389,3 +395,75 @@ async function init() {
 }
 
 init();
+
+// ========== DC 待办集成 ==========
+const DCTodo = {
+  // 检查是否支持待办 API
+  isSupported() {
+    return typeof dchat !== 'undefined' && dchat.todo && dchat.todo.create;
+  },
+
+  // 创建待办
+  async create(title, options = {}) {
+    try {
+      if (this.isSupported()) {
+        // 方式1: 直接调用 DC API
+        const result = await dchat.todo.create({
+          title: title,
+          summary: options.summary || '',
+          priority: options.priority || 'medium',
+          dueTime: options.dueTime || null
+        });
+        return { success: true, data: result };
+      } else {
+        // 方式2: 复制到剪贴板并提示用户
+        const todoText = `待办: ${title}${options.summary ? '\n备注: ' + options.summary : ''}`;
+        await navigator.clipboard.writeText(todoText);
+        return { 
+          success: false, 
+          fallback: true, 
+          message: '已复制到剪贴板，请在 DC 中创建待办' 
+        };
+      }
+    } catch (e) {
+      console.error('创建待办失败:', e);
+      return { success: false, error: e.message };
+    }
+  },
+
+  // 为笔记创建待办
+  async createFromNote(note) {
+    const categoryConfig = DEFAULT_CATEGORIES[note.category] || DEFAULT_CATEGORIES.other;
+    
+    // 如果是待办分类，自动创建
+    if (note.category === 'todo') {
+      const result = await this.create(note.content.substring(0, 100), {
+        summary: `来自 DC 悬浮记事本 - ${new Date(note.timestamp).toLocaleString()}`,
+        priority: 'medium'
+      });
+      
+      if (result.success) {
+        showToast('✅ 已创建 DC 待办');
+        // 标记为已同步
+        note.syncedToTodo = true;
+        await Storage.set(STORAGE_KEY, notes);
+        renderNotes();
+      } else if (result.fallback) {
+        showToast('📋 已复制，请在 DC 中粘贴创建');
+      } else {
+        showToast('❌ 创建失败: ' + result.error);
+      }
+      return result;
+    }
+    
+    return { skipped: true, reason: '非待办分类' };
+  }
+};
+
+// 全局函数：从笔记创建待办
+async function createTodoFromNote(noteId) {
+  const note = notes.find(n => n.id === noteId);
+  if (!note) return;
+  
+  await DCTodo.createFromNote(note);
+}
