@@ -391,6 +391,11 @@ body {
 .switch input:checked + .slider::after {
   left: 22px;
 }
+.switch-label {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-left: 8px;
+}
 
 /* Toast */
 #toast {

@@ -17,16 +17,13 @@
     "productName": "DC 悬浮记事本",
     "mac": {
       "target": ["dmg", "zip"],
-      "category": "public.app-category.productivity",
-      "icon": "assets/icon.icns"
+      "category": "public.app-category.productivity"
     },
     "win": {
-      "target": ["nsis", "zip"],
-      "icon": "assets/icon.ico"
+      "target": ["nsis", "zip"]
     },
     "linux": {
       "target": ["AppImage", "deb", "rpm"],
-      "icon": "assets/icon.png",
       "category": "Office"
     },
     "files": ["src/**/*", "assets/**/*"]

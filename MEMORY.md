@@ -42,9 +42,25 @@ dc-notepad/
 - [x] 编写主进程（窗口、托盘、快捷键、IPC）
 - [x] 迁移 UI 代码
 - [x] 集成 LiteLLM 分类
-- [ ] 安装依赖并测试运行
-- [ ] 打包为 .app 并测试
+- [x] 安装依赖并测试运行
+- [x] 打包为 .app 并测试
 - [ ] 分享给同事试用
+
+### 2026-05-26 Electron 打包完成
+
+**打包产物：**
+| 文件 | 路径 | 大小 |
+|------|------|------|
+| .app 应用 | `electron/dist/mac-arm64/DC 悬浮记事本.app` | ~90MB |
+| zip 安装包 | `electron/dist/DC 悬浮记事本-1.1.0-arm64-mac.zip` | 86MB |
+
+**使用方式：**
+1. 直接使用: `open electron/dist/mac-arm64/DC\ 悬浮记事本.app`
+2. 分享 zip: 发送 zip 文件给同事解压使用
+
+**注意事项：**
+- dmg 打包在当前环境受限（hdiutil 权限），但 zip 完全可用
+- 如需 dmg 可在本机运行 `npm run build:mac`
 
 ## 版本记录
 
