@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>DC 图标融合方案</title>
+  <style>
+    body {
+      font-family: -apple-system, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+      margin: 0;
+      padding: 40px;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 40px;
+    }
+    .container {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .option {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      width: 280px;
+      transition: transform 0.2s;
+    }
+    .option:hover {
+      transform: translateY(-5px);
+    }
+    .option.selected {
+      box-shadow: 0 0 0 3px #FF6B35;
+    }
+    .icon-display {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 20px;
+      background: #f8f9fa;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .option-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .option-desc {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+    }
+    .tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #FF6B35;
+      color: white;
+      border-radius: 12px;
+      font-size: 11px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 DC 图标 + 记事本融合方案</h1>
+  
+  <div class="container">
+    <!-- 方案1 -->
+    <div class="option">
+      <div class="icon-display">
+        <svg width="180" height="180" viewBox="0 0 240 240">
+          <defs>
+            <linearGradient id="o1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FF6B35"/>
+              <stop offset="100%" stop-color="#FF8F5C"/>
+            </linearGradient>
+          </defs>
+          <rect x="25" y="20" width="130" height="140" rx="10" fill="url(#o1)"/>
+          <rect x="35" y="30" width="110" height="120" rx="6" fill="white"/>
+          <rect x="48" y="55" width="84" height="3" rx="1.5" fill="#9CA3AF"/>
+          <rect x="48" y="68" width="60" height="3" rx="1.5" fill="#9CA3AF"/>
+          <rect x="48" y="81" width="75" height="3" rx="1.5" fill="#9CA3AF"/>
+          <circle cx="90" cy="110" r="18" fill="#FF6B35"/>
+          <circle cx="90" cy="110" r="7" fill="white"/>
+        </svg>
+      </div>
+      <div class="option-title">方案1：内嵌式</div>
+      <div class="option-desc">DC图标直接嵌入记事本页面中，作为页面核心视觉元素</div>
+      <span class="tag">简洁直接</span>
+    </div>
+
+    <!-- 方案2 -->
+    <div class="option">
+      <div class="icon-display">
+        <svg width="180" height="180" viewBox="0 0 240 240">
+          <defs>
+            <linearGradient id="o2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FF6B35"/>
+              <stop offset="100%" stop-color="#FF8F5C"/>
+            </linearGradient>
+          </defs>
+          <rect x="20" y="20" width="100" height="100" rx="20" fill="url(#o2)"/>
+          <rect x="30" y="30" width="80" height="80" rx="12" fill="white"/>
+          <circle cx="70" cy="70" r="22" fill="#FF6B35"/>
+          <circle cx="70" cy="70" r="8" fill="white"/>
+          <rect x="130" y="50" width="70" height="8" rx="4" fill="#FF6B35"/>
+          <rect x="130" y="70" width="55" height="8" rx="4" fill="#9CA3AF"/>
+          <rect x="130" y="90" width="65" height="8" rx="4" fill="#9CA3AF"/>
+        </svg>
+      </div>
+      <div class="option-title">方案2：并列式</div>
+      <div class="option-desc">左侧DC图标徽章，右侧笔记列表，体现"DC里的记事本"</div>
+      <span class="tag">直观表意</span>
+    </div>
+
+    <!-- 方案3 -->
+    <div class="option">
+      <div class="icon-display">
+        <svg width="180" height="180" viewBox="0 0 240 240">
+          <defs>
+            <linearGradient id="o3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FF6B35"/>
+              <stop offset="100%" stop-color="#FF8F5C"/>
+            </linearGradient>
+          </defs>
+          <rect x="25" y="20" width="130" height="140" rx="10" fill="white" stroke="#FF6B35" stroke-width="3"/>
+          <circle cx="90" cy="90" r="35" fill="url(#o3)"/>
+          <path d="M90 65 C75 65, 65 75, 65 90 C65 108, 78 115, 90 115 C102 115, 115 108, 115 90 C115 75, 105 65, 90 65" 
+                fill="white"/>
+          <circle cx="90" cy="90" r="10" fill="#FF6B35"/>
+          <rect x="48" y="138" width="84" height="3" rx="1.5" fill="#9CA3AF"/>
+          <rect x="48" y="148" width="60" height="3" rx="1.5" fill="#9CA3AF"/>
+        </svg>
+      </div>
+      <div class="option-title">方案3：徽章式</div>
+      <div class="option-desc">DC图标作为记事本的"印章"或"徽章"，强化品牌识别</div>
+      <span class="tag">品牌感强</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- 版本5：毛玻璃风格 -->
+  <defs>
+    <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#34D399;stop-opacity:0.8"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="84" height="84" rx="22" fill="url(#glassGrad)"/>
+  <!-- 高光效果 -->
+  <ellipse cx="35" cy="30" rx="15" ry="10" fill="white" opacity="0.3"/>
+  <!-- 对勾 -->
+  <path d="M32 52 L44 64 L68 36" stroke="white" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

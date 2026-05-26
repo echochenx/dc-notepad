@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- 版本1：DC 原版风格 -->
+  <defs>
+    <linearGradient id="dcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981"/>
+      <stop offset="100%" style="stop-color:#F97316"/>
+    </linearGradient>
+  </defs>
+  <!-- 圆角方形背景 -->
+  <rect x="10" y="10" width="80" height="80" rx="20" fill="url(#dcGrad)"/>
+  <!-- 对勾/心形图案 -->
+  <path d="M50 70 L30 50 Q25 45 30 40 Q35 35 40 40 L50 55 L60 40 Q65 35 70 40 Q75 45 70 50 Z" fill="white"/>
+</svg>

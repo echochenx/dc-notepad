@@ -1,0 +1,38 @@
+{
+  "name": "dc-notepad",
+  "version": "1.1.0",
+  "description": "DC 悬浮记事本 - 始终置顶的轻量记事工具",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "build:linux": "electron-builder --linux",
+    "build:all": "electron-builder --mac --win --linux"
+  },
+  "build": {
+    "appId": "com.smartwork.dc-notepad",
+    "productName": "DC 悬浮记事本",
+    "mac": {
+      "target": ["dmg", "zip"],
+      "category": "public.app-category.productivity",
+      "icon": "assets/icon.icns"
+    },
+    "win": {
+      "target": ["nsis", "zip"],
+      "icon": "assets/icon.ico"
+    },
+    "linux": {
+      "target": ["AppImage", "deb", "rpm"],
+      "icon": "assets/icon.png",
+      "category": "Office"
+    },
+    "files": ["src/**/*", "assets/**/*"]
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.0"
+  }
+}

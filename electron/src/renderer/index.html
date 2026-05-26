@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DC 悬浮记事本</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 悬浮球模式 -->
+  <div id="fab-container">
+    <button id="fab-button" title="点击展开记事本">
+      <svg viewBox="0 0 100 100" class="fab-icon">
+        <defs>
+          <linearGradient id="dcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#10B981"/>
+            <stop offset="100%" style="stop-color:#F97316"/>
+          </linearGradient>
+        </defs>
+        <rect x="10" y="10" width="80" height="80" rx="20" fill="url(#dcGrad)"/>
+        <path d="M50 72 L28 48 Q23 42 28 37 Q34 32 40 38 L50 52 L60 38 Q66 32 72 37 Q77 42 72 48 Z" fill="white"/>
+      </svg>
+    </button>
+  </div>
+  
+  <!-- 主面板模式 -->
+  <div id="app">
+    <!-- 标题栏 -->
+    <div id="title-bar">
+      <div id="title">
+        <svg viewBox="0 0 100 100" class="title-icon">
+          <defs><linearGradient id="dcGradSmall" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#10B981"/><stop offset="100%" style="stop-color:#F97316"/></linearGradient></defs>
+          <rect x="10" y="10" width="80" height="80" rx="20" fill="url(#dcGradSmall)"/>
+          <path d="M50 72 L28 48 Q23 42 28 37 Q34 32 40 38 L50 52 L60 38 Q66 32 72 37 Q77 42 72 48 Z" fill="white"/>
+        </svg>
+        <span class="text">DC 悬浮记事本</span>
+      </div>
+      <div id="window-controls">
+        <button id="btn-settings" title="分类设置">⚙️</button>
+        <button id="btn-collapse" title="收起">◀</button>
+      </div>
+    </div>
+    
+    <!-- 搜索栏 -->
+    <div id="search-bar">
+      <input type="text" id="search-input" placeholder="搜索笔记...">
+      <div id="search-actions">
+        <button id="btn-voice" title="语音输入">🎤</button>
+        <button id="btn-paste" title="粘贴截图">📷</button>
+        <button id="btn-clipboard" title="读取剪贴板">📋</button>
+      </div>
+    </div>
+    
+    <!-- 分类标签 -->
+    <div id="category-tabs"></div>
+    
+    <!-- 笔记列表 -->
+    <div id="notes-list"></div>
+    
+    <!-- 输入区 -->
+    <div id="input-area">
+      <textarea id="note-input" placeholder="输入文字、粘贴截图...\n支持 Markdown"></textarea>
+      <div id="input-actions">
+        <div id="input-left">
+          <button id="btn-img" title="粘贴图片">📷</button>
+          <button id="btn-mic" title="语音">🎤</button>
+          <button id="btn-clip" title="剪贴板">📋</button>
+        </div>
+        <button id="btn-save">保存 (Enter)</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 设置面板 -->
+  <div id="settings-panel">
+    <div id="settings-header">
+      <div id="settings-title">
+        <button id="btn-back" title="返回">◀</button>
+        <span>分类设置</span>
+      </div>
+    </div>
+    
+    <div id="category-list"></div>
+    
+    <div id="category-edit-form" style="display:none">
+      <input type="hidden" id="cat-id">
+      <div class="form-row">
+        <label>名称</label>
+        <input type="text" id="cat-name" placeholder="分类名称">
+      </div>
+      <div class="form-row">
+        <label>图标</label>
+        <div id="cat-icon-select" class="icon-grid"></div>
+      </div>
+      <div class="form-row">
+        <label>颜色</label>
+        <div id="cat-color-select" class="color-grid"></div>
+      </div>
+      <div class="form-row">
+        <label>关键词（用逗号分隔）</label>
+        <textarea id="cat-keywords" placeholder="如：要做,完成,跟进"></textarea>
+      </div>
+      <div class="form-actions">
+        <button id="btn-save-cat" class="primary">保存</button>
+        <button id="btn-cancel-cat">取消</button>
+      </div>
+    </div>
+    
+   <div id="settings-footer">
+     <button id="btn-add-category">+ 添加新分类</button>
+   </div>
+
+    <div style="padding:12px 16px;border-top:1px solid #e5e7eb;margin-top:8px;">
+      <button id="btn-ai-settings" style="width:100%;padding:12px;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:10px;color:#374151;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <span>🤖</span>
+        <span>AI 分类设置（可选）</span>
+        <span style="margin-left:auto;font-size:12px;color:#9ca3af;">▶</span>
+      </button>
+    </div>
+  </div>
+  
+  <script src="renderer.js"></script>
+
+<!-- AI 设置面板 -->
+<div id="ai-settings-panel" style="display:none">
+  <div id="ai-settings-header">
+    <div id="ai-settings-title">
+      <button id="btn-ai-back" title="返回">◀</button>
+      <span>🤖 AI 分类设置（可选）</span>
+    </div>
+  </div>
+  
+  <div id="ai-settings-content">
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px;margin-bottom:16px;font-size:13px;color:#0369a1;">
+      💡 <strong>提示：</strong>AI 分类为可选功能。不配置也能正常使用，会默认使用内置关键词分类。
+    </div>
+    
+    <div class="form-row" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <input type="checkbox" id="ai-enabled" style="width:18px;height:18px;cursor:pointer;">
+      <label for="ai-enabled" style="margin:0;cursor:pointer;font-weight:500;">启用 AI 智能分类</label>
+    </div>
+    
+    <div id="ai-config-fields" style="opacity:0.5;pointer-events:none;">
+      <div class="form-row" style="margin-bottom:14px;">
+        <label style="display:block;margin-bottom:6px;font-size:13px;color:#666;">服务地址</label>
+        <input type="text" id="ai-host" value="127.0.0.1" style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+      </div>
+      
+      <div class="form-row" style="margin-bottom:14px;">
+        <label style="display:block;margin-bottom:6px;font-size:13px;color:#666;">端口</label>
+        <input type="number" id="ai-port" value="9999" style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+      </div>
+      
+      <div class="form-row" style="margin-bottom:14px;">
+        <label style="display:block;margin-bottom:6px;font-size:13px;color:#666;">API Key</label>
+        <input type="password" id="ai-apikey" placeholder="输入你的 API Key" style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+      </div>
+      
+      <div class="form-row" style="margin-bottom:14px;">
+        <label style="display:block;margin-bottom:6px;font-size:13px;color:#666;">模型名称</label>
+        <input type="text" id="ai-model" value="glm-5-external" style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+      </div>
+    </div>
+    
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button id="btn-save-ai" style="flex:1;padding:12px;background:linear-gradient(135deg,#10B981,#059669);color:white;border:none;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;">保存配置</button>
+      <button id="btn-test-ai" style="padding:12px 16px;background:#f3f4f6;color:#666;border:1px solid #ddd;border-radius:10px;font-size:14px;cursor:pointer;">测试</button>
+    </div>
+    
+    <div id="ai-status" style="margin-top:12px;font-size:13px;text-align:center;"></div>
+  </div>
+</div>
+
+</body>
+</html>
