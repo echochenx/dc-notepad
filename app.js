@@ -314,8 +314,6 @@ function setupEventListeners() {
     showToast('测试中...');
     const result = await testAIConnection();
     showToast(result.message);
-    const result = await testAIConnection();
-    showToast(result.message);
   });
 
   // 剪贴板
