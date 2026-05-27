@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>DC 悬浮记事本 - 图标预览</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: -apple-system, sans-serif;
+    }
+    .icon-container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .icon-240 {
+      width: 240px;
+      height: 240px;
+      margin: 20px auto;
+    }
+    .icon-128 {
+      width: 128px;
+      height: 128px;
+      margin: 20px auto;
+    }
+    .icon-64 {
+      width: 64px;
+      height: 64px;
+      margin: 20px auto;
+    }
+    h2 { color: #333; margin-bottom: 30px; }
+    .sizes { display: flex; gap: 40px; align-items: center; margin-top: 30px; }
+    .size-item { text-align: center; }
+    .size-label { font-size: 12px; color: #666; margin-top: 10px; }
+    .instructions {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f0f9ff;
+      border-radius: 12px;
+      text-align: left;
+      max-width: 400px;
+    }
+    .instructions h3 { margin-top: 0; color: #0369a1; }
+    .instructions ol { padding-left: 20px; }
+    .instructions li { margin: 8px 0; color: #475569; }
+  </style>
+</head>
+<body>
+  <div class="icon-container">
+    <h2>🎨 DC 悬浮记事本 - 图标预览</h2>
+    
+    <div id="icon-240" class="icon-240">
+      <svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#10B981"/>
+            <stop offset="100%" style="stop-color:#059669"/>
+          </linearGradient>
+          <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#F97316"/>
+            <stop offset="100%" style="stop-color:#EA580C"/>
+          </linearGradient>
+          <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.15"/>
+          </filter>
+        </defs>
+        <rect x="20" y="20" width="200" height="200" rx="48" fill="url(#bgGrad)" filter="url(#shadow)"/>
+        <rect x="55" y="55" width="130" height="150" rx="12" fill="white" opacity="0.95"/>
+        <rect x="55" y="75" width="130" height="8" rx="4" fill="#E5E7EB"/>
+        <path d="M155 45 L195 45 L195 85 L175 85 L155 105 Z" fill="url(#accentGrad)" opacity="0.9"/>
+        <rect x="75" y="100" width="90" height="6" rx="3" fill="#9CA3AF"/>
+        <rect x="75" y="118" width="70" height="6" rx="3" fill="#9CA3AF"/>
+        <rect x="75" y="136" width="80" height="6" rx="3" fill="#9CA3AF"/>
+        <rect x="75" y="154" width="60" height="6" rx="3" fill="#9CA3AF"/>
+        <circle cx="80" cy="180" r="12" fill="#10B981" opacity="0.2"/>
+        <path d="M74 180 L78 184 L86 176" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+    
+    <div class="sizes">
+      <div class="size-item">
+        <div class="icon-64">
+          <svg width="64" height="64" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="20" width="200" height="200" rx="48" fill="url(#bgGrad)"/>
+            <rect x="55" y="55" width="130" height="150" rx="12" fill="white" opacity="0.95"/>
+            <rect x="55" y="75" width="130" height="8" rx="4" fill="#E5E7EB"/>
+            <path d="M155 45 L195 45 L195 85 L175 85 L155 105 Z" fill="url(#accentGrad)" opacity="0.9"/>
+            <rect x="75" y="100" width="90" height="6" rx="3" fill="#9CA3AF"/>
+            <rect x="75" y="118" width="70" height="6" rx="3" fill="#9CA3AF"/>
+            <rect x="75" y="136" width="80" height="6" rx="3" fill="#9CA3AF"/>
+            <circle cx="80" cy="180" r="12" fill="#10B981" opacity="0.2"/>
+            <path d="M74 180 L78 184 L86 176" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="size-label">64×64</div>
+      </div>
+      <div class="size-item">
+        <div class="icon-128">
+          <svg width="128" height="128" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="20" width="200" height="200" rx="48" fill="url(#bgGrad)"/>
+            <rect x="55" y="55" width="130" height="150" rx="12" fill="white" opacity="0.95"/>
+            <rect x="55" y="75" width="130" height="8" rx="4" fill="#E5E7EB"/>
+            <path d="M155 45 L195 45 L195 85 L175 85 L155 105 Z" fill="url(#accentGrad)" opacity="0.9"/>
+            <rect x="75" y="100" width="90" height="6" rx="3" fill="#9CA3AF"/>
+            <rect x="75" y="118" width="70" height="6" rx="3" fill="#9CA3AF"/>
+            <rect x="75" y="136" width="80" height="6" rx="3" fill="#9CA3AF"/>
+            <circle cx="80" cy="180" r="12" fill="#10B981" opacity="0.2"/>
+            <path d="M74 180 L78 184 L86 176" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="size-label">128×128</div>
+      </div>
+    </div>
+    
+    <div class="instructions">
+      <h3>📥 保存图标为 PNG</h3>
+      <ol>
+        <li>在浏览器中打开此页面（右键 → 复制链接地址）</li>
+        <li>使用截图工具截取 240×240 区域</li>
+        <li>或使用浏览器开发者工具导出 SVG 为 PNG</li>
+        <li>保存为 icon_240.png（&lt;200KB）</li>
+      </ol>
+      <p style="margin-top:15px;font-size:12px;color:#64748b;">
+        替代方案：使用在线转换工具<br>
+        <a href="https://convertio.co/svg-png/" target="_blank">convertio.co/svg-png</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
