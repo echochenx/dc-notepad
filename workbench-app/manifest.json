@@ -1,7 +1,7 @@
 {
   "name": "DC悬浮记事本",
   "description": "随时记录灵感、待办、临时信息，支持AI智能分类",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "type": "web_app",
   "icon": "icons/icon_240.png",
   "entry": "index.html",

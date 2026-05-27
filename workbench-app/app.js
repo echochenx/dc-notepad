@@ -312,8 +312,10 @@ function setupEventListeners() {
   // 测试 AI
   document.getElementById('btn-test-ai').addEventListener('click', async () => {
     showToast('测试中...');
-    const result = await classifyWithAI('这是一个测试');
-    showToast(result.success ? `✅ 连接成功: ${result.category}` : '❌ 连接失败');
+    const result = await testAIConnection();
+    showToast(result.message);
+    const result = await testAIConnection();
+    showToast(result.message);
   });
 
   // 剪贴板
@@ -466,4 +468,102 @@ async function createTodoFromNote(noteId) {
   if (!note) return;
   
   await DCTodo.createFromNote(note);
+}
+
+// ========== AI 连接测试（带详细错误提示） ==========
+async function testAIConnection() {
+  // 1. 检查是否启用了 AI
+  if (!aiConfig.enabled) {
+    return {
+      success: false,
+      message: '⚠️ 请先勾选「启用 AI 智能分类」开关'
+    };
+  }
+  
+  // 2. 检查 API Key
+  if (!aiConfig.apiKey || aiConfig.apiKey.trim() === '') {
+    return {
+      success: false,
+      message: '⚠️ 请填写 API Key，这是访问 AI 服务的密钥'
+    };
+  }
+  
+  // 3. 检查服务地址
+  if (!aiConfig.host || !aiConfig.port) {
+    return {
+      success: false,
+      message: '⚠️ 请填写完整的服务地址和端口'
+    };
+  }
+  
+  // 4. 尝试连接
+  try {
+    const response = await fetch(`http://${aiConfig.host}:${aiConfig.port}/v1/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${aiConfig.apiKey}`
+      },
+      body: JSON.stringify({
+        model: aiConfig.model || 'glm-5-external',
+        messages: [{ role: 'user', content: '你好' }],
+        max_tokens: 10
+      })
+    });
+    
+    if (response.ok) {
+      return {
+        success: true,
+        message: '✅ 连接成功！AI 服务正常工作'
+      };
+    } else {
+      const status = response.status;
+      if (status === 401) {
+        return {
+          success: false,
+          message: '❌ API Key 无效，请检查密钥是否正确'
+        };
+      } else if (status === 404) {
+        return {
+          success: false,
+          message: '❌ 服务地址错误或模型不存在，请检查地址和模型名称'
+        };
+      } else if (status === 429) {
+        return {
+          success: false,
+          message: '❌ 请求太频繁，请稍后再试'
+        };
+      } else {
+        return {
+          success: false,
+          message: `❌ 服务返回错误 (${status})，请检查配置`
+        };
+      }
+    }
+  } catch (error) {
+    console.error('AI 测试错误:', error);
+    
+    // 根据错误类型给出具体提示
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      return {
+        success: false,
+        message: '❌ 无法连接到服务器，请检查：\n1. 服务是否已启动\n2. 地址和端口是否正确\n3. 网络连接是否正常'
+      };
+    } else if (error.message.includes('CORS')) {
+      return {
+        success: false,
+        message: '❌ 跨域访问被阻止，请确认 AI 服务允许浏览器访问'
+      };
+    } else if (error.message.includes('timeout') || error.name === 'AbortError') {
+      return {
+        success: false,
+        message: '❌ 连接超时，请检查服务是否正常运行'
+      };
+    } else {
+      return {
+        success: false,
+        message: `❌ 连接失败: ${error.message}`
+      };
+    }
+  }
 }
