@@ -567,3 +567,6 @@ async function testAIConnection() {
     }
   }
 }
+
+// 初始化
+init();
