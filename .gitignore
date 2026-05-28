@@ -1,7 +1,27 @@
+# Dependencies
 node_modules/
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# Logs
 *.log
+npm-debug.log*
+
+# Build output
 dist/
-node_modules/
-dist/
-.DS_Store
+out/
+release/
+
+# Temp files
+*.tmp
+*.temp
+*.bak
+
+# IDE
+.vscode/
+.idea/
+
+# Temp files from development
+compressed-icon.png

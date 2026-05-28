@@ -205,3 +205,35 @@ icons/
 ```
 
 **规格检查：** ✅ 240×240px, PNG, 10.6KB (<200KB)
+
+### 2026-05-28 渐进式重构（方案B）
+
+**执行内容：**
+1. 清理无用文件
+   - 删除 `workbench-app/` 目录（重复代码）
+   - 删除 `extension/` 目录（废弃的 Chrome 扩展）
+   - 删除临时文件：`app_fixed.js`、`confirm.md`、`.mcporter-config`
+   - 清理多余图标文件
+
+2. 更新项目配置
+   - 更新 `.gitignore`：添加更完善的忽略规则
+
+3. 更新项目文档
+   - 更新 `README.md`：简化项目结构说明
+
+**当前项目结构：**
+```
+dc-notepad/
+├── index.html          # H5 入口
+├── app.js              # 核心逻辑
+├── styles.css          # 样式
+├── icons/              # 图标资源
+├── electron/           # Electron 桌面版
+├── MEMORY.md           # 项目记忆
+└── README.md           # 项目文档
+```
+
+**优化效果：**
+- 项目结构更清晰
+- 无冗余代码
+- 便于后续迭代开发
