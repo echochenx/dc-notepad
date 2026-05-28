@@ -277,7 +277,7 @@ function setupEventListeners() {
 
   // 回车保存
   document.getElementById('note-input').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if ((e.key === 'Enter' || e.keyCode === 13) && !e.shiftKey && !e.isComposing) {
       e.preventDefault();
       const v = e.target.value; if (v.trim()) { addNote(v).catch(function(e){ console.error(e); }); }
     }
