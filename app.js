@@ -107,6 +107,96 @@ async function classifyWithAI(content) {
 async function loadNotes() {
   const data = await Storage.get(STORAGE_KEY);
   notes = data || [];
+  
+  // 自动修复旧数据：为没有 type 的笔记重新分类
+  let needSave = false;
+  notes.forEach(note => {
+    if (!note.type) {
+      note.type = classifyLocally(note.content);
+      needSave = true;
+    }
+  });
+  if (needSave) {
+    await saveNotes();
+    console.log('已自动修复旧数据的分类');
+  }
+  
+  renderNotes();
+}
+async function loadNotes() {
+  const data = await Storage.get(STORAGE_KEY);
+  notes = data || [];
+  
+  // 自动修复旧数据：为没有 type 的笔记重新分类
+  let needSave = false;
+  notes.forEach(note => {
+    if (!note.type) {
+      note.type = classifyLocally(note.content);
+      needSave = true;
+    }
+  });
+  if (needSave) {
+    await saveNotes();
+    console.log('已自动修复旧数据的分类');
+  }
+  
+  renderNotes();
+}
+async function loadNotes() {
+  const data = await Storage.get(STORAGE_KEY);
+  notes = data || [];
+  
+  // 自动修复旧数据：为没有 type 的笔记重新分类
+  let needSave = false;
+  notes.forEach(note => {
+    if (!note.type) {
+      note.type = classifyLocally(note.content);
+      needSave = true;
+    }
+  });
+  if (needSave) {
+    await saveNotes();
+    console.log('已自动修复旧数据的分类');
+  }
+  
+  renderNotes();
+}
+async function loadNotes() {
+  const data = await Storage.get(STORAGE_KEY);
+  notes = data || [];
+  
+  // 自动修复旧数据：为没有 type 的笔记重新分类
+  let needSave = false;
+  notes.forEach(note => {
+    if (!note.type) {
+      note.type = classifyLocally(note.content);
+      needSave = true;
+    }
+  });
+  if (needSave) {
+    await saveNotes();
+    console.log('已自动修复旧数据的分类');
+  }
+  
+  renderNotes();
+}
+async function loadNotes() {
+  const data = await Storage.get(STORAGE_KEY);
+  notes = data || [];
+  
+  // 自动修复旧数据：为没有 type 的笔记重新分类
+  let needSave = false;
+  notes.forEach(note => {
+    if (!note.type) {
+      note.type = classifyLocally(note.content);
+      needSave = true;
+    }
+  });
+  if (needSave) {
+    await saveNotes();
+    console.log('已自动修复旧数据的分类');
+  }
+  
   renderNotes();
 }
 
