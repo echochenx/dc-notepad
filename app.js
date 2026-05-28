@@ -279,7 +279,7 @@ function setupEventListeners() {
   document.getElementById('note-input').addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      addNote(e.target.value);
+      const v = e.target.value; if (v.trim()) { addNote(v).catch(function(e){ console.error(e); }); }
     }
   });
 
