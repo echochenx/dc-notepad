@@ -7,12 +7,12 @@ const CONFIG_KEY = 'dc_notepad_config_v1';
 
 // 默认分类
 const DEFAULT_CATEGORIES = {
-  todo: { name: '待办', icon: '✅', color: '#10B981', keywords: ['要做','完成','跟进','提醒','记得','待办','TODO','todo','需要','必须'] },
-  info: { name: '临时信息', icon: '🔑', color: '#F59E0B', keywords: ['key','token','密码','账号','api','secret','pwd'] },
-  meeting: { name: '会议', icon: '📋', color: '#3B82F6', keywords: ['会议','讨论','对齐','评审','周会','站会'] },
-  idea: { name: '灵感', icon: '💡', color: '#8B5CF6', keywords: ['想法','试试','能不能','如果','可以考虑','灵感'] },
-  question: { name: '疑问', icon: '❓', color: '#F97316', keywords: ['为什么','怎么','如何','不懂','疑问'] },
-  other: { name: '其他', icon: '📌', color: '#9CA3AF', keywords: [] }
+  todo: { name: '待办', icon: '✅', color: '#10B981', keywords: ['要做','完成','跟进','提醒','记得','待办','TODO','todo','需要','必须','记得做','别忘了','记得去','要去','得去','安排','计划','准备','下周','明天','今天','今晚','发给','提交','回复','确认','核对','检查','整理','写','发','改','修','弄','处理','解决','联系'], patterns: [/要.+做/,/需要.+完成/,/记得.+去/,/别忘了/,/待办/,/TODO/i,/记得.+发/,/记得.+回/,/记得.+写/,/记得.+改/,/记得.+联系/,/记得.+检查/,/记得.+确认/,/下周.+做/,/明天.+做/,/今天.+做/,/下午.+做/,/上午.+做/,/晚上.+做/,/点之前/,/之前完成/,/之前做完/,/号之前/] },
+  info: { name: '临时信息', icon: '🔑', color: '#F59E0B', keywords: ['key','token','密码','账号','api','secret','pwd','passwd','apikey','access','credential','密钥','口令','验证码','code','id','url','地址','链接','网址','http','https','ip','IP','端口','host','用户名','username','账户','登录','login','授权','auth'], patterns: [/api[_-]?key/i,/access[_-]?token/i,/secret[_-]?key/i,/password/i,/账号[：:]\s*\S/,/密码[：:]\s*\S/,/key[：:]\s*\S/i,/token[：:]\s*\S/i,/ID[：:]\s*\S/,/验证码/,/\d{4,}.*验证/,/https?:\/\/\S+/,/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/] },
+  meeting: { name: '会议', icon: '📋', color: '#3B82F6', keywords: ['会议','讨论','对齐','评审','周会','站会','meeting','会','开会','参会','参加','讨论会','评审会','沟通会','同步','sync','会议纪要','会议记录','meeting notes','培训','分享','演示','demo','showcase'], patterns: [/.+会议/,/会议.+/,/.+评审/,/评审.+/,/.+对齐/,/对齐.+/,/.+讨论/,/讨论.+/,/周会/,/站会/,/培训/,/分享会/,/演示/,/showcase/i,/sync.+/i,/meeting/i,/会议室/,/参会/,/开会/,/线下会/,/线上会/] },
+  idea: { name: '灵感', icon: '💡', color: '#8B5CF6', keywords: ['想法','试试','能不能','如果','也许','可以考虑','灵感','思路','点子','建议','方案','优化','改进','尝试','测试','实验','新功能','feature','idea','想到','可以','要不要','是不是','或者'], patterns: [/想法[：:]?/,/思路[：:]?/,/灵感/,/可以尝试/,/可以考虑/,/试试看/,/能不能/,/要不要/,/如果.+就/,/也许.+可以/,/或许.+可以/,/想到一个/,/有个想法/,/有个点子/,/建议.+/,/优化.+/,/改进.+/,/新功能/,/idea/i] },
+  question: { name: '疑问', icon: '❓', color: '#F97316', keywords: ['为什么','怎么','如何','不懂','疑问','问一下','请教','求助','问题','疑惑','困惑','不太懂','不明白','什么是','啥是','咋回事','怎么办','咋办','why','how','what','question','?','？'], patterns: [/为什么.+/,/怎么.+?\?/,/如何.+/,/不懂/,/不明白/,/不太懂/,/有问题/,/疑问/,/请教/,/求助/,/问一下/,/啥是/,/什么是/,/咋回事/,/怎么办/,/咋办/,/why/i,/how to/i,/\?\s*$/,/？\s*$/] },
+  other: { name: '其他', icon: '📌', color: '#9CA3AF', keywords: [], patterns: [] }
 };
 
 // ========== 状态 ==========
@@ -57,11 +57,13 @@ const Storage = {
 
 // ========== 分类逻辑 ==========
 function classifyLocally(content) {
-  const lowered = content.toLowerCase();
   for (const [id, cat] of Object.entries(DEFAULT_CATEGORIES)) {
     if (id === 'other') continue;
-    for (const keyword of cat.keywords) {
-      if (lowered.includes(keyword.toLowerCase())) return id;
+    for (const keyword of cat.keywords || []) {
+      if (content.includes(keyword)) return id;
+    }
+    for (const pattern of cat.patterns || []) {
+      if (pattern.test(content)) return id;
     }
   }
   return 'other';
