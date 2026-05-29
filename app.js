@@ -57,16 +57,23 @@ const Storage = {
 
 // ========== 分类逻辑 ==========
 function classifyLocally(content) {
+  let bestId = 'other';
+  let bestScore = 0;
   for (const [id, cat] of Object.entries(DEFAULT_CATEGORIES)) {
     if (id === 'other') continue;
+    let score = 0;
     for (const keyword of cat.keywords || []) {
-      if (content.includes(keyword)) return id;
+      if (content.includes(keyword)) score += 1;
     }
     for (const pattern of cat.patterns || []) {
-      if (pattern.test(content)) return id;
+      if (pattern.test(content)) score += 3; // patterns are more specific than keywords
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestId = id;
     }
   }
-  return 'other';
+  return bestId;
 }
 
 async function classifyWithAI(content) {
