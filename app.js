@@ -454,30 +454,22 @@ const DCTodo = {
 
   // 为笔记创建待办
   async createFromNote(note) {
-    const categoryConfig = DEFAULT_CATEGORIES[note.type] || DEFAULT_CATEGORIES.other;
+    const result = await this.create(note.content.substring(0, 100), {
+      summary: `来自 DC 悬浮记事本 - ${new Date(note.createdAt).toLocaleString()}`,
+      priority: 'medium'
+    });
     
-    // 如果是待办分类，自动创建
-    if (note.type === 'todo') {
-      const result = await this.create(note.content.substring(0, 100), {
-        summary: `来自 DC 悬浮记事本 - ${new Date(note.timestamp).toLocaleString()}`,
-        priority: 'medium'
-      });
-      
-      if (result.success) {
-        showToast('✅ 已创建 DC 待办');
-        // 标记为已同步
-        note.syncedToTodo = true;
-        await Storage.set(STORAGE_KEY, notes);
-        renderNotes();
-      } else if (result.fallback) {
-        showToast('📋 已复制，请在 DC 中粘贴创建');
-      } else {
-        showToast('❌ 创建失败: ' + result.error);
-      }
-      return result;
+    if (result.success) {
+      showToast('✅ 已创建 DC 待办');
+      note.syncedToTodo = true;
+      await Storage.set(STORAGE_KEY, notes);
+      renderNotes();
+    } else if (result.fallback) {
+      showToast('📋 已复制，请在 DC 中粘贴创建');
+    } else {
+      showToast('❌ 创建失败: ' + result.error);
     }
-    
-    return { skipped: true, reason: '非待办分类' };
+    return result;
   }
 };
 
