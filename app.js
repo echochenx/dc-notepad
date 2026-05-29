@@ -246,8 +246,6 @@ async function saveEdit(id) {
   renderNotes();
   showToast('已更新');
 }
-}
-function renderNotes() {
   const container = document.getElementById('notes-list');
   const searchTerm = document.getElementById('search-input').value.toLowerCase();
 
