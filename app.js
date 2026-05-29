@@ -272,14 +272,14 @@ function setupEventListeners() {
   // 保存笔记
   document.getElementById('btn-save').addEventListener('click', () => {
     const content = document.getElementById('note-input').value;
-    addNote(content);
+    addNote(content).catch(e => { console.error('保存失败:', e); showToast('❌ 保存失败'); });
   });
 
   // 回车保存
   document.getElementById('note-input').addEventListener('keydown', (e) => {
     if ((e.key === 'Enter' || e.keyCode === 13) && !e.shiftKey && !e.isComposing) {
       e.preventDefault();
-      const v = e.target.value; if (v.trim()) { addNote(v).catch(function(e){ console.error(e); }); }
+      const v = e.target.value; if (v.trim()) { addNote(v).catch(e => { console.error('保存失败:', e); showToast('❌ 保存失败'); }); }
     }
   });
 
@@ -445,10 +445,10 @@ const DCTodo = {
 
   // 为笔记创建待办
   async createFromNote(note) {
-    const categoryConfig = DEFAULT_CATEGORIES[note.category] || DEFAULT_CATEGORIES.other;
+    const categoryConfig = DEFAULT_CATEGORIES[note.type] || DEFAULT_CATEGORIES.other;
     
     // 如果是待办分类，自动创建
-    if (note.category === 'todo') {
+    if (note.type === 'todo') {
       const result = await this.create(note.content.substring(0, 100), {
         summary: `来自 DC 悬浮记事本 - ${new Date(note.timestamp).toLocaleString()}`,
         priority: 'medium'
@@ -577,4 +577,6 @@ async function testAIConnection() {
     }
   }
 }
-
+async function saveNotes() {
+  await Storage.set(STORAGE_KEY, notes);
+}
