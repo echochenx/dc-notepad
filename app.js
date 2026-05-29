@@ -18,6 +18,8 @@ const DEFAULT_CATEGORIES = {
 // ========== 状态 ==========
 let notes = [];
 let currentCategory = 'all';
+let selectedNotes = new Set();
+let isBatchMode = false;
 let aiConfig = { enabled: false, host: '127.0.0.1', port: 9999, apiKey: '', model: 'glm-5-external' };
 
 // ========== 存储适配层 ==========
@@ -170,18 +172,91 @@ async function deleteNote(id) {
   showToast('已删除');
 }
 
+
+async function batchDelete() {
+  if (selectedNotes.size === 0) {
+    showToast('请先选择笔记');
+    return;
+  }
+  notes = notes.filter(n => !selectedNotes.has(n.id));
+  await saveNotes();
+  selectedNotes.clear();
+  isBatchMode = false;
+  renderNotes();
+  showToast('已删除');
+}
+
+function toggleBatchMode() {
+  isBatchMode = !isBatchMode;
+  selectedNotes.clear();
+  renderNotes();
+}
+
+function toggleSelect(id) {
+  if (selectedNotes.has(id)) {
+    selectedNotes.delete(id);
+  } else {
+    selectedNotes.add(id);
+  }
+  renderNotes();
+}
+
+function startEdit(id) {
+  const note = notes.find(n => n.id === id);
+  if (!note) return;
+  
+  const noteEl = document.querySelector(`.note-item[data-id="${id}"]`);
+  const contentEl = noteEl.querySelector('.note-content');
+  
+  contentEl.innerHTML = `
+    <textarea class="edit-textarea" id="edit-input-${id}" style="width:100%;min-height:80px;padding:8px;border:1px solid #ddd;border-radius:6px;resize:vertical;">${escapeHtml(note.content)}</textarea>
+    <div style="margin-top:8px;display:flex;gap:8px;">
+      <select id="edit-type-${id}" style="padding:6px 10px;border-radius:6px;">
+        ${Object.entries(DEFAULT_CATEGORIES).map(([key, val]) =>
+          `<option value="${key}" ${note.type === key ? 'selected' : ''}>${val.icon} ${val.name}</option>`
+        ).join('')}
+      </select>
+      <button onclick="saveEdit('${id}')" style="padding:6px 12px;background:#10B981;color:white;border:none;border-radius:6px;cursor:pointer;">保存</button>
+      <button onclick="cancelEdit('${id}')" style="padding:6px 12px;background:#f3f4f6;border:none;border-radius:6px;cursor:pointer;">取消</button>
+    </div>
+  `;
+}
+
+function cancelEdit(id) {
+  renderNotes();
+}
+
+async function saveEdit(id) {
+  const note = notes.find(n => n.id === id);
+  if (!note) return;
+  
+  const newContent = document.getElementById(`edit-input-${id}`).value.trim();
+  const newType = document.getElementById(`edit-type-${id}`).value;
+  
+  if (!newContent) {
+    showToast('内容不能为空');
+    return;
+  }
+  
+  note.content = newContent;
+  note.type = newType;
+  note.updatedAt = new Date().toISOString();
+  
+  await saveNotes();
+  renderNotes();
+  showToast('已更新');
+}
+}
 function renderNotes() {
   const container = document.getElementById('notes-list');
   const searchTerm = document.getElementById('search-input').value.toLowerCase();
 
   let filtered = notes;
 
-  // 分类筛选
   if (currentCategory !== 'all') {
     filtered = filtered.filter(n => n.type === currentCategory);
   }
 
-  // 搜索筛选
   if (searchTerm) {
     filtered = filtered.filter(n => n.content.toLowerCase().includes(searchTerm));
   }
@@ -196,27 +271,44 @@ function renderNotes() {
     return;
   }
 
-  container.innerHTML = filtered.map(note => {
+  let html = '';
+  
+  if (isBatchMode) {
+    html += `
+      <div class="batch-toolbar" style="display:flex;align-items:center;gap:10px;padding:10px;background:#f3f4f6;border-radius:8px;margin-bottom:10px;">
+        <span>已选 ${selectedNotes.size} 条</span>
+        <button onclick="batchDelete()" style="padding:6px 12px;background:#EF4444;color:white;border:none;border-radius:6px;cursor:pointer;">🗑️ 删除选中</button>
+        <button onclick="toggleBatchMode()" style="padding:6px 12px;background:#9CA3AF;color:white;border:none;border-radius:6px;cursor:pointer;">取消</button>
+      </div>
+    `;
+  }
+
+  html += filtered.map(note => {
     const cat = DEFAULT_CATEGORIES[note.type] || DEFAULT_CATEGORIES.other;
     const time = formatTime(note.createdAt);
+    const isSelected = selectedNotes.has(note.id);
     
     return `
-      <div class="note-item" data-id="${note.id}">
+      <div class="note-item" data-id="${note.id}" style="${isSelected ? 'background:#FEF3C7;' : ''}">
         <div class="note-header">
+          ${isBatchMode ? `<input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleSelect('${note.id}')" style="margin-right:8px;">` : ''}
           <span class="note-category" style="background:${cat.color}20;color:${cat.color}">
             ${cat.icon} ${cat.name}
           </span>
           <span class="note-time">${time}</span>
         </div>
-        <div class="note-content">${escapeHtml(note.content).replace(/\n/g, '<br>')}</div>
+        <div class="note-content" ${isBatchMode ? '' : `onclick="startEdit('${note.id}')"`} style="${isBatchMode ? '' : 'cursor:pointer;'}">${escapeHtml(note.content).replace(/\n/g, '<br>')}</div>
         <div class="note-actions">
           <button onclick="copyNote('${note.id}')">📋 复制</button>
-          <button onclick="createTodoFromNote('${note.id}')" style="background:#10B98120;color:#10B981">✅ 创建待办</button>
-          <button class="btn-delete" onclick="deleteNote('${note.id}')">🗑️ 删除</button>
+          <button onclick="startEdit('${note.id}')" style="background:#3B82F620;color:#3B82F6">✏️ 编辑</button>
+          <button onclick="createTodoFromNote('${note.id}')" style="background:#10B98120;color:#10B981">✅ 待办</button>
+          <button class="btn-delete" onclick="deleteNote('${note.id}')">🗑️</button>
         </div>
       </div>
     `;
   }).join('');
+
+  container.innerHTML = html;
 }
 
 function copyNote(id) {
